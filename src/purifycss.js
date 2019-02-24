@@ -1,5 +1,4 @@
 const fs = require("fs")
-import CleanCss from "clean-css"
 import CssTreeWalker from "./CssTreeWalker"
 import FileUtil from "./utils/FileUtil"
 import PrintUtil from "./utils/PrintUtil"
@@ -8,11 +7,9 @@ import { getAllWordsInContent } from "./utils/ExtractWordsUtil"
 
 const OPTIONS = {
     output: false,
-    minify: false,
     info: false,
     rejected: false,
-    whitelist: [],
-    cleanCssOptions: {}
+    whitelist: []
 }
 
 const getOptions = (options = {}) => {
@@ -24,9 +21,6 @@ const getOptions = (options = {}) => {
 }
 
 
-const minify = (cssSource, options) =>
-    new CleanCss(options).minify(cssSource).styles
-
 const purify = (searchThrough, css, options, callback) => {
     if (typeof options === "function") {
         callback = options
@@ -35,22 +29,15 @@ const purify = (searchThrough, css, options, callback) => {
     options = getOptions(options)
     let cssString = FileUtil.filesToSource(css, "css"),
         content = FileUtil.filesToSource(searchThrough, "content")
-    PrintUtil.startLog(minify(cssString).length)
     let wordsInContent = getAllWordsInContent(content),
         selectorFilter = new SelectorFilter(wordsInContent, options.whitelist),
         tree = new CssTreeWalker(cssString, [selectorFilter])
     tree.beginReading()
     let source = tree.toString()
 
-    source = options.minify ? minify(source, options.cleanCssOptions) : source
-
     // Option info = true
     if (options.info) {
-        if (options.minify) {
-            PrintUtil.printInfo(source.length)
-        } else {
-            PrintUtil.printInfo(minify(source, options.cleanCssOptions).length)
-        }
+        PrintUtil.printInfo(source.length)
     }
 
     // Option rejected = true

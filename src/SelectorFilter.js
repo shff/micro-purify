@@ -19,10 +19,6 @@ class SelectorFilter {
         this.parseWhitelist(whitelist)
     }
 
-    initialize(CssSyntaxTree) {
-        CssSyntaxTree.on("readRule", this.parseRule.bind(this))
-    }
-
     parseWhitelist(whitelist) {
         whitelist.forEach(whitelistSelector => {
             whitelistSelector = whitelistSelector.toLowerCase()
