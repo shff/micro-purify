@@ -35,29 +35,11 @@ export const concatFiles = (files, options) =>
     return `${total}${code} `;
   }, "");
 
-export const getFilesFromPatternArray = fileArray => {
-  let sourceFiles = {};
-  for (let string of fileArray) {
-    try {
-      // See if string is a filepath, not a file pattern.
-      fs.statSync(string);
-      sourceFiles[string] = true;
-    } catch (e) {
-      const files = glob(string);
-      files.forEach(file => {
-        sourceFiles[file] = true;
-      });
-    }
-  }
-  return Object.keys(sourceFiles);
-};
-
 export const filesToSource = files => {
   if (Array.isArray(files)) {
-    files = getFilesFromPatternArray(files);
+    files = files.flatMap(file => (fs.existsSync(file) ? file : glob(file)));
     return concatFiles(files, {});
   }
-  // 'files' is already a source string.
   return files;
 };
 
