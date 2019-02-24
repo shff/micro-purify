@@ -18,9 +18,9 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 // http://www.w3.org/TR/CSS21/grammar.html
 // https://github.com/visionmedia/css-parse/pull/49#issuecomment-30088027
-var commentre = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//g
+var commentre = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//g;
 
-export default function(css, options){
+export default function(css, options) {
   options = options || {};
 
   /**
@@ -37,7 +37,7 @@ export default function(css, options){
   function updatePosition(str) {
     var lines = str.match(/\n/g);
     if (lines) lineno += lines.length;
-    var i = str.lastIndexOf('\n');
+    var i = str.lastIndexOf("\n");
     column = ~i ? str.length - i : column + str.length;
   }
 
@@ -47,7 +47,7 @@ export default function(css, options){
 
   function position() {
     var start = { line: lineno, column: column };
-    return function(node){
+    return function(node) {
       node.position = new Position(start);
       whitespace();
       return node;
@@ -77,7 +77,9 @@ export default function(css, options){
   var errorsList = [];
 
   function error(msg) {
-    var err = new Error(options.source + ':' + lineno + ':' + column + ': ' + msg);
+    var err = new Error(
+      options.source + ":" + lineno + ":" + column + ": " + msg
+    );
     err.reason = msg;
     err.filename = options.source;
     err.line = lineno;
@@ -99,7 +101,7 @@ export default function(css, options){
     var rulesList = rules();
 
     return {
-      type: 'stylesheet',
+      type: "stylesheet",
       stylesheet: {
         rules: rulesList,
         parsingErrors: errorsList
@@ -132,7 +134,7 @@ export default function(css, options){
     var rules = [];
     whitespace();
     comments(rules);
-    while (css.length && css.charAt(0) != '}' && (node = atrule() || rule())) {
+    while (css.length && css.charAt(0) != "}" && (node = atrule() || rule())) {
       if (node !== false) {
         rules.push(node);
         comments(rules);
@@ -169,7 +171,7 @@ export default function(css, options){
   function comments(rules) {
     var c;
     rules = rules || [];
-    while (c = comment()) {
+    while ((c = comment())) {
       if (c !== false) {
         rules.push(c);
       }
@@ -183,14 +185,18 @@ export default function(css, options){
 
   function comment() {
     var pos = position();
-    if ('/' != css.charAt(0) || '*' != css.charAt(1)) return;
+    if ("/" != css.charAt(0) || "*" != css.charAt(1)) return;
 
     var i = 2;
-    while ("" != css.charAt(i) && ('*' != css.charAt(i) || '/' != css.charAt(i + 1))) ++i;
+    while (
+      "" != css.charAt(i) &&
+      ("*" != css.charAt(i) || "/" != css.charAt(i + 1))
+    )
+      ++i;
     i += 2;
 
-    if ("" === css.charAt(i-1)) {
-      return error('End of comment missing');
+    if ("" === css.charAt(i - 1)) {
+      return error("End of comment missing");
     }
 
     var str = css.slice(2, i - 2);
@@ -200,7 +206,7 @@ export default function(css, options){
     column += 2;
 
     return pos({
-      type: 'comment',
+      type: "comment",
       comment: str
     });
   }
@@ -215,13 +221,13 @@ export default function(css, options){
     /* @fix Remove all comments from selectors
      * http://ostermiller.org/findcomment.html */
     return trim(m[0])
-      .replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\/+/g, '')
+      .replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\/+/g, "")
       .replace(/"(?:\\"|[^"])*"|'(?:\\'|[^'])*'/g, function(m) {
-        return m.replace(/,/g, '\u200C');
+        return m.replace(/,/g, "\u200C");
       })
       .split(/\s*(?![^(]*\)),\s*/)
       .map(function(s) {
-        return s.replace(/\u200C/g, ',');
+        return s.replace(/\u200C/g, ",");
       });
   }
 
@@ -244,9 +250,9 @@ export default function(css, options){
     var val = match(/^((?:'(?:\\'|.)*?'|"(?:\\"|.)*?"|\([^\)]*?\)|[^};])+)/);
 
     var ret = pos({
-      type: 'declaration',
-      property: prop.replace(commentre, ''),
-      value: val ? trim(val[0]).replace(commentre, '') : ''
+      type: "declaration",
+      property: prop.replace(commentre, ""),
+      value: val ? trim(val[0]).replace(commentre, "") : ""
     });
 
     // ;
@@ -267,7 +273,7 @@ export default function(css, options){
 
     // declarations
     var decl;
-    while (decl = declaration()) {
+    while ((decl = declaration())) {
       if (decl !== false) {
         decls.push(decl);
         comments(decls);
@@ -287,7 +293,7 @@ export default function(css, options){
     var vals = [];
     var pos = position();
 
-    while (m = match(/^((\d+\.\d+|\.\d+|\d+)%?|[a-z]+)\s*/)) {
+    while ((m = match(/^((\d+\.\d+|\.\d+|\d+)%?|[a-z]+)\s*/))) {
       vals.push(m[1]);
       match(/^,\s*/);
     }
@@ -295,7 +301,7 @@ export default function(css, options){
     if (!vals.length) return;
 
     return pos({
-      type: 'keyframe',
+      type: "keyframe",
       values: vals,
       declarations: declarations()
     });
@@ -321,7 +327,7 @@ export default function(css, options){
 
     var frame;
     var frames = comments();
-    while (frame = keyframe()) {
+    while ((frame = keyframe())) {
       frames.push(frame);
       frames = frames.concat(comments());
     }
@@ -329,7 +335,7 @@ export default function(css, options){
     if (!close()) return error("@keyframes missing '}'");
 
     return pos({
-      type: 'keyframes',
+      type: "keyframes",
       name: name,
       vendor: vendor,
       keyframes: frames
@@ -354,7 +360,7 @@ export default function(css, options){
     if (!close()) return error("@supports missing '}'");
 
     return pos({
-      type: 'supports',
+      type: "supports",
       supports: supports,
       rules: style
     });
@@ -377,7 +383,7 @@ export default function(css, options){
     if (!close()) return error("@host missing '}'");
 
     return pos({
-      type: 'host',
+      type: "host",
       rules: style
     });
   }
@@ -400,12 +406,11 @@ export default function(css, options){
     if (!close()) return error("@media missing '}'");
 
     return pos({
-      type: 'media',
+      type: "media",
       media: media,
       rules: style
     });
   }
-
 
   /**
    * Parse custom-media.
@@ -417,7 +422,7 @@ export default function(css, options){
     if (!m) return;
 
     return pos({
-      type: 'custom-media',
+      type: "custom-media",
       name: trim(m[1]),
       media: trim(m[2])
     });
@@ -439,7 +444,7 @@ export default function(css, options){
 
     // declarations
     var decl;
-    while (decl = declaration()) {
+    while ((decl = declaration())) {
       decls.push(decl);
       decls = decls.concat(comments());
     }
@@ -447,7 +452,7 @@ export default function(css, options){
     if (!close()) return error("@page missing '}'");
 
     return pos({
-      type: 'page',
+      type: "page",
       selectors: sel,
       declarations: decls
     });
@@ -472,7 +477,7 @@ export default function(css, options){
     if (!close()) return error("@document missing '}'");
 
     return pos({
-      type: 'document',
+      type: "document",
       document: doc,
       vendor: vendor,
       rules: style
@@ -493,7 +498,7 @@ export default function(css, options){
 
     // declarations
     var decl;
-    while (decl = declaration()) {
+    while ((decl = declaration())) {
       decls.push(decl);
       decls = decls.concat(comments());
     }
@@ -501,7 +506,7 @@ export default function(css, options){
     if (!close()) return error("@font-face missing '}'");
 
     return pos({
-      type: 'font-face',
+      type: "font-face",
       declarations: decls
     });
   }
@@ -510,27 +515,26 @@ export default function(css, options){
    * Parse import
    */
 
-  var atimport = _compileAtrule('import');
+  var atimport = _compileAtrule("import");
 
   /**
    * Parse charset
    */
 
-  var atcharset = _compileAtrule('charset');
+  var atcharset = _compileAtrule("charset");
 
   /**
    * Parse namespace
    */
 
-  var atnamespace = _compileAtrule('namespace');
+  var atnamespace = _compileAtrule("namespace");
 
   /**
    * Parse non-block at-rules
    */
 
-
   function _compileAtrule(name) {
-    var re = new RegExp('^@' + name + '\\s*([^;]+);');
+    var re = new RegExp("^@" + name + "\\s*([^;]+);");
     return function() {
       var pos = position();
       var m = match(re);
@@ -538,7 +542,7 @@ export default function(css, options){
       var ret = { type: name };
       ret[name] = m[1].trim();
       return pos(ret);
-    }
+    };
   }
 
   /**
@@ -546,19 +550,21 @@ export default function(css, options){
    */
 
   function atrule() {
-    if (css[0] != '@') return;
+    if (css[0] != "@") return;
 
-    return atkeyframes()
-      || atmedia()
-      || atcustommedia()
-      || atsupports()
-      || atimport()
-      || atcharset()
-      || atnamespace()
-      || atdocument()
-      || atpage()
-      || athost()
-      || atfontface();
+    return (
+      atkeyframes() ||
+      atmedia() ||
+      atcustommedia() ||
+      atsupports() ||
+      atimport() ||
+      atcharset() ||
+      atnamespace() ||
+      atdocument() ||
+      atpage() ||
+      athost() ||
+      atfontface()
+    );
   }
 
   /**
@@ -569,25 +575,25 @@ export default function(css, options){
     var pos = position();
     var sel = selector();
 
-    if (!sel) return error('selector missing');
+    if (!sel) return error("selector missing");
     comments();
 
     return pos({
-      type: 'rule',
+      type: "rule",
       selectors: sel,
       declarations: declarations()
     });
   }
 
   return addParent(stylesheet());
-};
+}
 
 /**
  * Trim `str`.
  */
 
 function trim(str) {
-  return str ? str.replace(/^\s+|\s+$/g, '') : '';
+  return str ? str.replace(/^\s+|\s+$/g, "") : "";
 }
 
 /**
@@ -595,20 +601,22 @@ function trim(str) {
  */
 
 function addParent(obj, parent) {
-  var isNode = obj && typeof obj.type === 'string';
+  var isNode = obj && typeof obj.type === "string";
   var childParent = isNode ? obj : parent;
 
   for (var k in obj) {
     var value = obj[k];
     if (Array.isArray(value)) {
-      value.forEach(function(v) { addParent(v, childParent); });
-    } else if (value && typeof value === 'object') {
+      value.forEach(function(v) {
+        addParent(v, childParent);
+      });
+    } else if (value && typeof value === "object") {
       addParent(value, childParent);
     }
   }
 
   if (isNode) {
-    Object.defineProperty(obj, 'parent', {
+    Object.defineProperty(obj, "parent", {
       configurable: true,
       writable: true,
       enumerable: false,

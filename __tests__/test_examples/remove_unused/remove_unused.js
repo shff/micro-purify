@@ -1,1 +1,1 @@
-'.used-class'
+".used-class";

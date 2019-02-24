@@ -1,5 +1,5 @@
-'single'
+"single";
 
-'double-class'
+"double-class";
 
-'triple-simple-class'
+"triple-simple-class";

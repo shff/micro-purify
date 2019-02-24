@@ -1,68 +1,68 @@
-import parse from "./utils/parse"
-import stringify from "./utils/stringify"
+import parse from "./utils/parse";
+import stringify from "./utils/stringify";
 
-const RULE_TYPE = "rule"
-const MEDIA_TYPE = "media"
+const RULE_TYPE = "rule";
+const MEDIA_TYPE = "media";
 
 class CssTreeWalker {
-    constructor(code, plugins) {
-        this.startingSource = code
-        this.ast = null
-        this.plugins = plugins
-    }
+  constructor(code, plugins) {
+    this.startingSource = code;
+    this.ast = null;
+    this.plugins = plugins;
+  }
 
-    beginReading() {
-        this.ast = parse(this.startingSource)
-        this.readPlugin(this.ast.stylesheet)
-    }
+  beginReading() {
+    this.ast = parse(this.startingSource);
+    this.readPlugin(this.ast.stylesheet);
+  }
 
-    readPlugin(tree) {
-        this.readRules(tree.rules)
-        this.removeEmptyRules(tree.rules)
-    }
+  readPlugin(tree) {
+    this.readRules(tree.rules);
+    this.removeEmptyRules(tree.rules);
+  }
 
-    readRules(rules) {
-        for (let rule of rules) {
-            if (rule.type === RULE_TYPE) {
-                this.plugins.forEach(plugin => {
-                    plugin.parseRule(rule.selectors, rule)
-                })
-            }
-            if (rule.type === MEDIA_TYPE) {
-                this.readRules(rule.rules)
-            }
+  readRules(rules) {
+    for (let rule of rules) {
+      if (rule.type === RULE_TYPE) {
+        this.plugins.forEach(plugin => {
+          plugin.parseRule(rule.selectors, rule);
+        });
+      }
+      if (rule.type === MEDIA_TYPE) {
+        this.readRules(rule.rules);
+      }
+    }
+  }
+
+  removeEmptyRules(rules) {
+    let emptyRules = [];
+
+    for (let rule of rules) {
+      const ruleType = rule.type;
+
+      if (ruleType === RULE_TYPE && rule.selectors.length === 0) {
+        emptyRules.push(rule);
+      }
+      if (ruleType === MEDIA_TYPE) {
+        this.removeEmptyRules(rule.rules);
+        if (rule.rules.length === 0) {
+          emptyRules.push(rule);
         }
+      }
     }
 
-    removeEmptyRules(rules) {
-        let emptyRules = []
+    emptyRules.forEach(emptyRule => {
+      const index = rules.indexOf(emptyRule);
+      rules.splice(index, 1);
+    });
+  }
 
-        for (let rule of rules) {
-            const ruleType = rule.type
-
-            if (ruleType === RULE_TYPE && rule.selectors.length === 0) {
-                emptyRules.push(rule)
-            }
-            if (ruleType === MEDIA_TYPE) {
-                this.removeEmptyRules(rule.rules)
-                if (rule.rules.length === 0) {
-                    emptyRules.push(rule)
-                }
-            }
-        }
-
-        emptyRules.forEach(emptyRule => {
-            const index = rules.indexOf(emptyRule)
-            rules.splice(index, 1)
-        })
+  toString() {
+    if (this.ast) {
+      return stringify(this.ast, {}).replace(/,\n/g, ",");
     }
-
-    toString() {
-        if (this.ast) {
-            return stringify(this.ast, {}).replace(/,\n/g, ",")
-        }
-        return ""
-    }
+    return "";
+  }
 }
 
-export default CssTreeWalker
+export default CssTreeWalker;

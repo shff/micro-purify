@@ -1,3 +1,3 @@
-'testFoo'
+"testFoo";
 
-'camelCase'
+"camelCase";
