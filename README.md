@@ -126,28 +126,17 @@ purify(content, css, options);
 ```
 
 
-##### Example with both [glob](https://github.com/isaacs/node-glob) file patterns and source strings + minify + logging rejected selectors
+##### Example with both [glob](https://github.com/isaacs/node-glob) file patterns and source strings
 
 ```js
 var content = ['**/src/js/*.js', '**/src/html/*.html'];
 var css = '.button-active { color: green; } .unused-class { display: block; }';
 
 var options = {
-  output: './dist/purified.css',
-
-  // Will minify CSS code in addition to purify.
-  minify: true,
-
-  // Logs out removed selectors.
-  rejected: true
+  output: './dist/purified.css'
 };
 
 purify(content, css, options);
-```
-logs out:
-
-```
-.unused-class
 ```
 
 
