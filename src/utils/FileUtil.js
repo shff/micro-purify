@@ -29,18 +29,15 @@ export const getFilesFromPatternArray = fileArray => {
   return Object.keys(sourceFiles);
 };
 
-export const filesToSource = (files, type) => {
-  const isContent = type === "content";
+export const filesToSource = (files) => {
   if (Array.isArray(files)) {
     files = getFilesFromPatternArray(files);
     return concatFiles(files, {});
   }
   // 'files' is already a source string.
-  return isContent ? files.toLowerCase() : files;
+  return files;
 };
 
 export default {
-  concatFiles,
-  filesToSource,
-  getFilesFromPatternArray
+  filesToSource
 };

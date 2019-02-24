@@ -13,12 +13,8 @@ class CssTreeWalker {
 
   beginReading() {
     this.ast = parse(this.startingSource);
-    this.readPlugin(this.ast.stylesheet);
-  }
-
-  readPlugin(tree) {
-    this.readRules(tree.rules);
-    this.removeEmptyRules(tree.rules);
+    this.readRules(this.ast.stylesheet.rules);
+    this.removeEmptyRules(this.ast.stylesheet.rules);
   }
 
   readRules(rules) {

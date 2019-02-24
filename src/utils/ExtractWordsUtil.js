@@ -1,7 +1,3 @@
-const addWord = (words, word) => {
-  if (word) words.push(word);
-};
-
 export const getAllWordsInContent = content => {
   let used = {
     // Always include html and body.
@@ -31,7 +27,8 @@ export const getAllWordsInSelector = selector => {
     if (skipNextWord && !/[ #.]/.test(letter)) continue;
     // If pseudoclass or universal selector, skip the next word
     if (/[:*]/.test(letter)) {
-      addWord(words, word);
+      if (word)
+        words.push(word);
       word = "";
       skipNextWord = true;
       continue;
@@ -39,12 +36,14 @@ export const getAllWordsInSelector = selector => {
     if (/[a-z]/.test(letter)) {
       word += letter;
     } else {
-      addWord(words, word);
+      if (word)
+        words.push(word);
       word = "";
       skipNextWord = false;
     }
   }
 
-  addWord(words, word);
+  if (word)
+    words.push(word);
   return words;
 };

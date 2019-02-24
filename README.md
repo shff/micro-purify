@@ -46,30 +46,6 @@ purify(content, css, options)
 - [Gulp](https://github.com/purifycss/gulp-purifycss)
 - [Webpack](https://github.com/purifycss/purifycss-webpack-plugin)
 
-### CLI Usage
-
-```
-$ npm install -g purify-css
-```
-
-```
-$ purifycss -h
-
-purifycss <css> <content> [option]
-
-Options:
-  -m, --min        Minify CSS                         [boolean] [default: false]
-  -o, --out        Filepath to write purified css to                    [string]
-  -i, --info       Logs info on how much css was removed
-                                                      [boolean] [default: false]
-  -r, --rejected   Logs the CSS rules that were removed
-                                                      [boolean] [default: false]
-  -w, --whitelist  List of classes that should not be removed
-                                                           [array] [default: []]
-  -h, --help       Show help                                           [boolean]
-  -v, --version    Show version number                                 [boolean]
-```
-
 
 ## How it works
 
@@ -175,38 +151,12 @@ logs out:
 ```
 
 
-##### Example with callback
-
-```js
-var content = ['**/src/js/*.js', '**/src/html/*.html'];
-var css = ['**/src/css/*.css'];
-
-purify(content, css, function (purifiedResult) {
-  console.log(purifiedResult);
-});
-```
-
-
-##### Example with callback + options
-
-```js
-var content = ['**/src/js/*.js', '**/src/html/*.html'];
-var css = ['**/src/css/*.css'];
-
-var options = {
-  minify: true
-};
-
-purify(content, css, options, function (purifiedAndMinifiedResult) {
-  console.log(purifiedAndMinifiedResult);
-});
-```
 
 ### API in depth
 
 ```javascript
-// Four possible arguments.
-purify(content, css, options, callback);
+// Three possible arguments.
+purify(content, css, options);
 ```
 
 #####  The `content` argument
@@ -232,53 +182,4 @@ purify(content, css, options, callback);
 
 ##### Properties of options object:
 
-* **`minify:`** Set to `true` to minify. Default: `false`.
-
-* **`output:`** Filepath to write purified CSS to. Returns raw string if `false`. Default: `false`.
-
-* **`info:`** Logs info on how much CSS was removed if `true`. Default: `false`.
-
-* **`rejected:`** Logs the CSS rules that were removed if `true`. Default: `false`.
-
 * **`whitelist`** Array of selectors to always leave in. Ex. `['button-active', '*modal*']` this will leave any selector that includes `modal` in it and selectors that match `button-active`. (wrapping the string with *'s, leaves all selectors that include it)
-
-
-
-##### The (optional) ```callback``` argument
-##### Type: `Function`
-
-A function that will receive the purified CSS as it's argument.
-
-##### Example of callback use
-``` javascript
-purify(content, css, options, function(purifiedCSS){
-  console.log(purifiedCSS, ' is the result of purify');
-});
-```
-
-##### Example of callback without options
-``` javascript
-purify(content, css, function(purifiedCSS){
-  console.log('callback without options and received', purifiedCSS);
-});
-```
-
-##### Example CLI Usage
-
-```
-$ purifycss src/css/main.css src/css/bootstrap.css src/js/main.js --min --info --out src/dist/index.css
-```
-This will concat both `main.css` and `bootstrap.css` and purify it by looking at what CSS selectors were used inside of `main.js`. It will then write the result to `dist/index.css`
-
-The `--min` flag minifies the result.
-
-The `--info` flag will print this to stdout:
-```
-    ________________________________________________
-    |
-    |   PurifyCSS has reduced the file size by ~ 33.8%
-    |
-    ________________________________________________
-
-```
-The CLI currently does not support file patterns.
