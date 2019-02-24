@@ -1,5 +1,19 @@
 const fs = require("fs");
-import glob from "glob";
+const path = require("path");
+const minimatch = require("minimatch");
+
+const glob = (filter, pathName = ".") => {
+  return fs.readdirSync(pathName).flatMap(file => {
+    var filename = path.join(pathName, file);
+    if (fs.lstatSync(filename).isDirectory()) {
+      return glob(filter, filename);
+    } else if (minimatch(filename, filter)) {
+      return [ filename ];
+    } else {
+      return [];
+    }
+  });
+};
 
 export const concatFiles = (files, options) =>
   files.reduce((total, file) => {
@@ -20,7 +34,7 @@ export const getFilesFromPatternArray = fileArray => {
       fs.statSync(string);
       sourceFiles[string] = true;
     } catch (e) {
-      const files = glob.sync(string);
+      const files = glob(string);
       files.forEach(file => {
         sourceFiles[file] = true;
       });
