@@ -31,13 +31,7 @@ Compiler.prototype.stylesheet = function(node) {
 };
 
 Compiler.prototype.mapVisit = function(nodes) {
-  var buf = "";
-
-  for (var i = 0, length = nodes.length; i < length; i++) {
-    buf += this[nodes[i].type](nodes[i]);
-  }
-
-  return buf;
+  return nodes.map(node => this[node.type](node)).join("");
 };
 
 Compiler.prototype.comment = function() {
