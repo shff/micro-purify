@@ -20,7 +20,7 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * Expose compiler.
  */
 
-module.exports = (node, options) => new Compiler(options).compile(node);
+export default (node, options) => new Compiler(options).compile(node);
 
 /**
  * Initialize a new `Compiler`.
