@@ -1,33 +1,31 @@
 {
-  "name": "purify-css",
-  "version": "1.2.6",
-  "description": "Removed unused css. Compatible with single-page apps.",
-  "main": "./lib/purifycss.js",
-  "module": "./lib/purifycss.es.js",
-  "jsnext:main": "./lib/purifycss.es.js",
-  "dependencies": {
-  },
+  "license": "MIT",
+  "name": "micro-purify",
+  "version": "1.3.0",
+  "description": "Zero dependencies unused-CSS removal tool.",
+  "author": "Silvio Henrique Ferreira",
+  "main": "./lib/micro-purify.js",
+  "module": "./lib/micro-purify.es.js",
+  "jsnext:main": "./lib/micro-purify.es.js",
   "devDependencies": {
     "jasmine": "^3.3.1"
   },
   "scripts": {
     "test": "jasmine __tests__/index.js",
-    "build": "microbundle src/purifycss.js"
+    "build": "microbundle src/micro-purify.js"
   },
+  "homepage": "https://github.com/shff/micro-purify",
   "repository": {
     "type": "git",
-    "url": "https://github.com/purifycss/purifycss.git"
+    "url": "https://github.com/shff/micro-purify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shff/micro-purify/issues"
   },
   "keywords": [
     "optimize",
     "css",
     "remove",
     "unused"
-  ],
-  "author": "Kenny Tran, Matthew Rourke, Phoebe Li",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/purifycss/purifycss/issues"
-  },
-  "homepage": "https://github.com/purifycss/purifycss"
+  ]
 }

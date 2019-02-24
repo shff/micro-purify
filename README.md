@@ -1,13 +1,13 @@
-# PurifyCSS  
+# Micro-Purify
 
-[![Travis](https://img.shields.io/travis/purifycss/purifycss/master.svg)]()
-[![npm](https://img.shields.io/npm/dm/purify-css.svg)]()
-[![David](https://img.shields.io/david/purifycss/purifycss.svg)]()
-![Join the chat at https://gitter.im/purifycss/purifycss](https://badges.gitter.im/purifycss/purifycss.svg)
+[![Circle](https://img.shields.io/circleci/project/github/shff/micro-purify/master.svg)]()
+[![npm](https://img.shields.io/npm/dm/micro-purify.svg)]()
+[![David](https://img.shields.io/david/shff/micro-purify.svg)]()
 
+This is a zero-dependencies fork of purify-css.
 
-A function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.  
-PurifyCSS does not modify the original CSS files. You can write to a new file, like minification.  
+Micro-purify is a function that takes content (HTML/JS/PHP/etc) and CSS, and returns only the **used CSS**.
+Micro-Purify does not modify the original CSS files. You can write to a new file, like minification.  
 If your application is using a CSS framework, this is especially useful as many selectors are often unused.
 
 ### Potential reduction
@@ -17,7 +17,6 @@ If your application is using a CSS framework, this is especially useful as many 
 * Minified: ~117k
 * Purified + Minified: **~35k**
 
-
 ## Usage
 
 ### Standalone
@@ -25,12 +24,12 @@ If your application is using a CSS framework, this is especially useful as many 
 Installation  
 
 ```bash
-npm i -D purify-css
+npm i -D micro-purify
 ```
 
 ```javascript
-import purify from "purify-css"
-const purify = require("purify-css")
+import purify from "micro-purify"
+const purify = require("micro-purify")
 
 let content = ""
 let css = ""
@@ -39,12 +38,6 @@ let options = {
 }
 purify(content, css, options)
 ```
-
-### Build Time
-
-- [Grunt](https://github.com/purifycss/grunt-purifycss)
-- [Gulp](https://github.com/purifycss/gulp-purifycss)
-- [Webpack](https://github.com/purifycss/purifycss-webpack-plugin)
 
 
 ## How it works

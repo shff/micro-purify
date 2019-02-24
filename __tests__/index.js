@@ -1,5 +1,5 @@
 const fs = require("fs");
-const purify = require("../lib/purifycss.js");
+const purify = require("../lib/micro-purify.js");
 const absPath = `${__dirname}/test_examples/`;
 const read = path => fs.readFileSync(absPath + path, "utf8");
 
