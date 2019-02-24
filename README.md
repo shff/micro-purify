@@ -2,6 +2,7 @@
 
 [![Circle](https://img.shields.io/circleci/project/github/shff/micro-purify/master.svg)]()
 [![npm](https://img.shields.io/npm/dm/micro-purify.svg)]()
+[![bundlephobia](https://img.shields.io/bundlephobia/minzip/micro-purify.svg)]()
 [![David](https://img.shields.io/david/shff/micro-purify.svg)]()
 
 This is a zero-dependencies fork of purify-css.
