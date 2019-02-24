@@ -220,7 +220,8 @@ export default function(css, options) {
     if (!m) return;
     /* @fix Remove all comments from selectors
      * http://ostermiller.org/findcomment.html */
-    return trim(m[0])
+    return m[0]
+      .trim()
       .replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\/+/g, "")
       .replace(/"(?:\\"|[^"])*"|'(?:\\'|[^'])*'/g, function(m) {
         return m.replace(/,/g, "\u200C");
@@ -241,7 +242,7 @@ export default function(css, options) {
     // prop
     var prop = match(/^(\*?[-#\/\*\\\w]+(\[[0-9a-z_-]+\])?)\s*/);
     if (!prop) return;
-    prop = trim(prop[0]);
+    prop = prop[0].trim();
 
     // :
     if (!match(/^:\s*/)) return error("property missing ':'");
@@ -252,7 +253,7 @@ export default function(css, options) {
     var ret = pos({
       type: "declaration",
       property: prop.replace(commentre, ""),
-      value: val ? trim(val[0]).replace(commentre, "") : ""
+      value: val ? val[0].trim().replace(commentre, "") : ""
     });
 
     // ;
@@ -351,7 +352,7 @@ export default function(css, options) {
     var m = match(/^@supports *([^{]+)/);
 
     if (!m) return;
-    var supports = trim(m[1]);
+    var supports = m[1].trim();
 
     if (!open()) return error("@supports missing '{'");
 
@@ -397,7 +398,7 @@ export default function(css, options) {
     var m = match(/^@media *([^{]+)/);
 
     if (!m) return;
-    var media = trim(m[1]);
+    var media = m[1].trim();
 
     if (!open()) return error("@media missing '{'");
 
@@ -423,8 +424,8 @@ export default function(css, options) {
 
     return pos({
       type: "custom-media",
-      name: trim(m[1]),
-      media: trim(m[2])
+      name: m[1].trim(),
+      media: m[2].trim()
     });
   }
 
@@ -467,8 +468,8 @@ export default function(css, options) {
     var m = match(/^@([-\w]+)?document *([^{]+)/);
     if (!m) return;
 
-    var vendor = trim(m[1]);
-    var doc = trim(m[2]);
+    var vendor = m[1].trim();
+    var doc = m[2].trim();
 
     if (!open()) return error("@document missing '{'");
 
@@ -586,14 +587,6 @@ export default function(css, options) {
   }
 
   return addParent(stylesheet());
-}
-
-/**
- * Trim `str`.
- */
-
-function trim(str) {
-  return str ? str.replace(/^\s+|\s+$/g, "") : "";
 }
 
 /**
