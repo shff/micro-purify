@@ -6,7 +6,6 @@
   "module": "./lib/purifycss.es.js",
   "jsnext:main": "./lib/purifycss.es.js",
   "dependencies": {
-    "minimatch": "^3.0.4"
   },
   "devDependencies": {
     "jasmine": "^3.3.1"

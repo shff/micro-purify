@@ -1,14 +1,23 @@
 const fs = require("fs");
 const path = require("path");
-const minimatch = require("minimatch");
 
 const glob = (filter, pathName = ".") => {
+  if (typeof filter == "string") {
+    filter = RegExp(
+      filter
+        .replace(/[-\/\\^$*+.[\]{}]/g, "\\$&")
+        .replace("\\+(", "(")
+        .replace("\\*\\*", ".*")
+        .replace("\\*", "[^/]*")
+    );
+  }
+
   return fs.readdirSync(pathName).flatMap(file => {
     var filename = path.join(pathName, file);
     if (fs.lstatSync(filename).isDirectory()) {
       return glob(filter, filename);
-    } else if (minimatch(filename, filter)) {
-      return [ filename ];
+    } else if (filename.match(filter)) {
+      return [filename];
     } else {
       return [];
     }
