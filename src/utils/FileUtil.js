@@ -29,7 +29,7 @@ export const getFilesFromPatternArray = fileArray => {
   return Object.keys(sourceFiles);
 };
 
-export const filesToSource = (files) => {
+export const filesToSource = files => {
   if (Array.isArray(files)) {
     files = getFilesFromPatternArray(files);
     return concatFiles(files, {});

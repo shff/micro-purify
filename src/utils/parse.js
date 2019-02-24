@@ -50,6 +50,9 @@ export default function(css, options) {
     return function(node) {
       node.position = new Position(start);
       whitespace();
+
+      if (options.nodeVisitor) options.nodeVisitor(node);
+
       return node;
     };
   }
