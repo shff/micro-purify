@@ -1,4 +1,36 @@
-import { getAllWordsInSelector } from "./utils/ExtractWordsUtil";
+const getAllWordsInSelector = selector => {
+  // Remove attr selectors. "a[href...]"" will become "a".
+  selector = selector.replace(/\[(.+?)\]/g, "").toLowerCase();
+  // If complex attr selector (has a bracket in it) just leave
+  // the selector in. ¯\_(ツ)_/¯
+  if (selector.includes("[") || selector.includes("]")) {
+    return [];
+  }
+  let skipNextWord = false,
+    word = "",
+    words = [];
+
+  for (let letter of selector) {
+    if (skipNextWord && !/[ #.]/.test(letter)) continue;
+    // If pseudoclass or universal selector, skip the next word
+    if (/[:*]/.test(letter)) {
+      if (word) words.push(word);
+      word = "";
+      skipNextWord = true;
+      continue;
+    }
+    if (/[a-z]/.test(letter)) {
+      word += letter;
+    } else {
+      if (word) words.push(word);
+      word = "";
+      skipNextWord = false;
+    }
+  }
+
+  if (word) words.push(word);
+  return words;
+};
 
 const isWildcardWhitelistSelector = selector => {
   return selector[0] === "*" && selector[selector.length - 1] === "*";
@@ -11,7 +43,7 @@ const hasWhitelistMatch = (selector, whitelist) => {
   return false;
 };
 
-class SelectorFilter {
+export default class SelectorFilter {
   constructor(contentWords, whitelist) {
     this.contentWords = contentWords;
     this.rejectedSelectors = [];
@@ -64,5 +96,3 @@ class SelectorFilter {
     return usedSelectors;
   }
 }
-
-export default SelectorFilter;
