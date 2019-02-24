@@ -51,7 +51,7 @@ export default function(css, options) {
       node.position = new Position(start);
       whitespace();
 
-      if (options.nodeVisitor) options.nodeVisitor(node);
+      if (options.visitor) options.visitor(node);
 
       return node;
     };
