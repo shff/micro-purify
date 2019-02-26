@@ -5,12 +5,6 @@
   "description": "Zero dependencies unused-CSS removal tool.",
   "author": "Silvio Henrique Ferreira",
   "main": "./src/micro-purify.js",
-  "devDependencies": {
-    "jasmine": "^3.3.1"
-  },
-  "scripts": {
-    "test": "jasmine __tests__/index.js"
-  },
   "homepage": "https://github.com/shff/micro-purify",
   "repository": {
     "type": "git",
@@ -24,5 +18,8 @@
     "css",
     "remove",
     "unused"
-  ]
+  ],
+  "scripts": {
+    "test": "jasmine test/index.js"
+  }
 }
