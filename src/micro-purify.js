@@ -1,6 +1,6 @@
-import parse from "./utils/parse";
-import compile from "./utils/compile";
-import FileUtil from "./utils/FileUtil";
+const parse = require("./utils/parse.js");
+const compile = require("./utils/compile.js");
+const FileUtil = require("./utils/FileUtil.js");
 
 const getAllWordsInSelector = selector =>
   selector
@@ -9,7 +9,7 @@ const getAllWordsInSelector = selector =>
     .toLowerCase()
     .match(/[a-z]+/g) || [];
 
-export default (searchThrough, css, options = {}) => {
+module.exports = (searchThrough, css, options = {}) => {
   const whitelist = ["html", "body"].concat(options.whitelist || []);
   const cssString = FileUtil.filesToSource(css);
   const content = FileUtil.filesToSource(searchThrough).toLowerCase();

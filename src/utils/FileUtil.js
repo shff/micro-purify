@@ -24,7 +24,7 @@ const glob = (filter, pathName = ".") => {
   });
 };
 
-export const concatFiles = (files, options) =>
+const concatFiles = (files, options) =>
   files.reduce((total, file) => {
     let code = "";
     try {
@@ -35,7 +35,7 @@ export const concatFiles = (files, options) =>
     return `${total}${code} `;
   }, "");
 
-export const filesToSource = files => {
+const filesToSource = files => {
   if (Array.isArray(files)) {
     files = files.flatMap(file => (fs.existsSync(file) ? file : glob(file)));
     return concatFiles(files, {});
@@ -43,6 +43,4 @@ export const filesToSource = files => {
   return files;
 };
 
-export default {
-  filesToSource
-};
+module.exports = { filesToSource };

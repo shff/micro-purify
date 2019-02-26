@@ -66,4 +66,4 @@ const compiler = {
   }
 };
 
-export default node => compiler.compile(node);
+module.exports = node => compiler.compile(node);
